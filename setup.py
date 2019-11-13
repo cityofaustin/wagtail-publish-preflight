@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 from os import path
-from wagtailautocomplete import __version__
+from publish_preflight import __version__
 
 here = path.abspath(path.dirname(__file__))
 with open(path.join(here, 'README.md')) as f:
@@ -8,7 +8,7 @@ with open(path.join(here, 'README.md')) as f:
 
 
 setup(
-    name='wagtail-autocomplete',
+    name='wagtail-publish-preflight',
     version=__version__,
 
     packages=find_packages(),
