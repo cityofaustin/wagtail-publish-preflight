@@ -2,6 +2,7 @@ from wagtail.admin.forms import WagtailAdminPageForm
 from wagtail.core.models import Page, PageRevision
 from django.core.exceptions import ValidationError
 from wagtail.admin import messages
+import logging
 
 
 class PublishPreflightForm(WagtailAdminPageForm):
@@ -30,12 +31,13 @@ class PublishPreflightForm(WagtailAdminPageForm):
             try:
                 self.add_error(field_name, f'{field_name} is empty!')
             except ValueError as e:
-                print(e)
+                logging.error(e)
                 try:
-                    field_value.non_form_errors().append(f'{field_name} not selected!')
+                    field_value.non_form_errors().append(
+                        f'{field_name} not selected!')
                     self.add_error(None, f'{field_name} is missing!')
                 except AttributeError as e:
-                    print(e)
+                    logging.error(e)
                     pass
                 pass
 
@@ -43,7 +45,8 @@ class PublishPreflightForm(WagtailAdminPageForm):
             relations = self.formsets
             # relation_value.cleaned_data
             errors_for_missing_relations = {
-                relation_name: try_adding_error_to_field(relation_name, relation_value)
+                relation_name: try_adding_error_to_field(
+                    relation_name, relation_value)
                 for (relation_name, relation_value) in relations.items()
                 if not relation_value.forms
             }
