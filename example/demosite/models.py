@@ -575,6 +575,10 @@ class PersonPage(Page, ContactFieldsMixin):
 
     base_form_class = PublishPreflightForm
 
+    fields_required_for_publish = (
+        'first_name',
+        'address_1',
+    )
     api_fields = (
         'first_name',
         'last_name',

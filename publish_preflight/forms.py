@@ -24,11 +24,13 @@ class PublishPreflightForm(WagtailAdminPageForm):
             """
             adds an error to each field if it is empty
             """
-            errors_for_empties = {
-                field_name: try_adding_error_to_field(field_name, field_value)
-                for (field_name, field_value) in self.data.items()
-                if len(field_value) == 0
-            }
+            if hasattr(self.instance, 'fields_required_for_publish'):
+                errors_for_empties = {
+                    field_name: try_adding_error_to_field(
+                        field_name, field_value)
+                    for (field_name, field_value) in self.data.items()
+                    if len(field_value) == 0 and field_name in self.instance.fields_required_for_publish
+                }
 
         def try_adding_error_to_field(field_name, field_value):
             try:
