@@ -21,6 +21,9 @@ class PublishPreflightForm(WagtailAdminPageForm):
         looks like this is working, atm tho it just wont let you publish any empty fields :-D
         """
         def check_for_empties():
+            """
+            adds an error to each field if it is empty
+            """
             errors_for_empties = {
                 field_name: try_adding_error_to_field(field_name, field_value)
                 for (field_name, field_value) in self.data.items()

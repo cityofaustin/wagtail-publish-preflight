@@ -14,6 +14,7 @@ from wagtail.documents.edit_handlers import DocumentChooserPanel
 from wagtail.images.api.fields import ImageRenditionField
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
+from publish_preflight.forms import PublishPreflightForm
 
 
 # ABSTRACT MODELS
@@ -148,6 +149,8 @@ class HomePage(Page):
         'related_links',
     )
 
+    base_form_class = PublishPreflightForm
+
     search_fields = Page.search_fields + [
         index.SearchField('body'),
     ]
@@ -188,6 +191,8 @@ class StandardPage(Page):
         on_delete=models.SET_NULL,
         related_name='+'
     )
+
+    base_form_class = PublishPreflightForm
 
     api_fields = (
         'intro',
@@ -417,6 +422,8 @@ class EventPage(Page):
         related_name='+'
     )
 
+    base_form_class = PublishPreflightForm
+
     api_fields = (
         'date_from',
         'date_to',
@@ -565,6 +572,8 @@ class PersonPage(Page, ContactFieldsMixin):
         on_delete=models.SET_NULL,
         related_name='+'
     )
+
+    base_form_class = PublishPreflightForm
 
     api_fields = (
         'first_name',
