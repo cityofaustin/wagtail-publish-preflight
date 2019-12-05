@@ -6,10 +6,11 @@ from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.fields import ParentalKey
 from taggit.models import TaggedItemBase
 
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, PageChooserPanel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, PageChooserPanel, StreamFieldPanel
 from wagtail.api import APIField
-from wagtail.core.fields import RichTextField
+from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core.models import Orderable, Page
+from wagtail.core.blocks import CharBlock, RichTextBlock, StructBlock
 from wagtail.documents.edit_handlers import DocumentChooserPanel
 from wagtail.images.api.fields import ImageRenditionField
 from wagtail.images.edit_handlers import ImageChooserPanel
@@ -191,6 +192,14 @@ class StandardPage(Page):
         on_delete=models.SET_NULL,
         related_name='+'
     )
+    extra = StreamField([
+        ('text', CharBlock()),
+        ('rich_text', RichTextBlock()),
+        ('product', StructBlock([
+            ('name', CharBlock()),
+            ('price', CharBlock()),
+        ])),
+    ], blank=True)
 
     base_form_class = PublishPreflightForm
 
@@ -223,6 +232,7 @@ StandardPage.content_panels = Page.content_panels + [
     InlinePanel('carousel_items', label="Carousel items"),
     FieldPanel('body', classname="full"),
     InlinePanel('related_links', label="Related links"),
+    StreamFieldPanel('extra'),
 ]
 
 
@@ -549,7 +559,27 @@ EventIndexPage.content_panels = Page.content_panels + [
 ]
 
 
+class StreamPage(Page):
+    body = StreamField([
+        ('text', CharBlock()),
+        ('rich_text', RichTextBlock()),
+        ('product', StructBlock([
+            ('name', CharBlock()),
+            ('price', CharBlock()),
+        ])),
+    ])
+
+    api_fields = ('body',)
+
+    # base_form_class = PublishPreflightForm
+
+    content_panels = [
+        FieldPanel('title'),
+        StreamFieldPanel('body'),
+    ]
+
 # Person page
+
 
 class PersonPage(Page, ContactFieldsMixin):
     page_ptr = models.OneToOneField(
@@ -572,6 +602,8 @@ class PersonPage(Page, ContactFieldsMixin):
         on_delete=models.SET_NULL,
         related_name='+'
     )
+
+    fields_required_for_publish = ('first_name', 'address_1', 'related_links')
 
     base_form_class = PublishPreflightForm
 
