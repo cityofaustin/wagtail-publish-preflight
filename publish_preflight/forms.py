@@ -49,12 +49,13 @@ class PublishPreflightForm(WagtailAdminPageForm):
         def check_for_missing_relations():
             relations = self.formsets
             # relation_value.cleaned_data
-            errors_for_missing_relations = {
-                relation_name: try_adding_error_to_field(
-                    relation_name, relation_value)
-                for (relation_name, relation_value) in relations.items()
-                if not relation_value.forms
-            }
+            if hasattr(self.instance, 'fields_required_for_publish'):
+                errors_for_missing_relations = {
+                    relation_name: try_adding_error_to_field(
+                        relation_name, relation_value)
+                    for (relation_name, relation_value) in relations.items()
+                    if not relation_value.forms and relation_name in self.instance.fields_required_for_publish
+                }
 
         cleaned_data = super().clean()
 
