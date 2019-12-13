@@ -29,7 +29,7 @@ class PublishPreflightForm(WagtailAdminPageForm):
                     field_name: try_adding_error_to_field(
                         field_name, field_value)
                     for (field_name, field_value) in self.data.items()
-                    if len(field_value) == 0 and field_name in self.instance.fields_required_for_publish
+                    if (len(field_value) == 0 or field_value == 'null') and field_name in self.instance.fields_required_for_publish
                 }
 
         def try_adding_error_to_field(field_name, field_value):

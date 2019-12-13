@@ -578,6 +578,7 @@ class PersonPage(Page, ContactFieldsMixin):
     fields_required_for_publish = (
         'first_name',
         'address_1',
+        'intro',
     )
     api_fields = (
         'first_name',
